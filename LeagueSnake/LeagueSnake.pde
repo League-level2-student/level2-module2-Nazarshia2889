@@ -76,6 +76,7 @@ void drawSnake() {
   
     fill(255, 0, 0);
     rect(head.x, head.y, 10, 10);
+    manageTail();
   
 }
 
@@ -106,10 +107,13 @@ void manageTail() {
 
 void checkTailCollision() {
   //If the snake crosses its own tail, shrink the tail back to one segment
-  for(Segment s : parts){
-  if(head.x == s.x && head.y == s.y){
-    parts.remove(parts);
-    Segment newTail = new Segment(head.x, head.y);
+  for(int i = 0;i<parts.size();i++){
+    Segment s = parts.get(i);
+    if(head.x == s.x && head.y == s.y){
+      eating = 0;
+      parts.removeAll(parts);
+      Segment newGame = new Segment(head.x, head.y);
+      parts.add(newGame);
   }
   }
 }
@@ -187,9 +191,11 @@ void checkBoundaries() {
 
 void eat() {
   //When the snake eats the food, its tail should grow and more food appear
-  if(head.x == foodX && head.y == foodY){
+  if(head.x >= foodX - 5 && head.x <= foodX + 5 && head.y >= foodY - 5 && head.y <= foodY + 5){
    eating += 1;
    dropFood();
+   Segment added = new Segment(head.x, head.y);
+   parts.add(added);
   }
 
 }
